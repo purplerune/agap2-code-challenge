@@ -10,6 +10,10 @@ import {
 } from "../state/episode/episodeSlice";
 import { HTML_REMOVER_REGEX } from "../constants/constants";
 
+/**
+ * Page regarding Episode
+ * @returns {ReactNode} A React element that renders the Page Episode
+ */
 export const EpisodePage: React.FC = () => {
   const params = useParams<{ showName: string; episodeId: string }>();
   const episodeIdNumber = parseInt(params.episodeId || "");
@@ -36,8 +40,6 @@ export const EpisodePage: React.FC = () => {
   }, [dispatch, refetch]);
 
   if (isLoading) return <div>Loading...</div>;
-
-  console.log("episode", episode);
 
   return (
     <section className="pt-10 overflow-hidden bg-gray-50 h-screen ">

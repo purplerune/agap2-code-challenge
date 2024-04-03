@@ -4,7 +4,13 @@ interface NavigationButtonProps {
   direction: "left" | "right";
   onClick: () => void;
 }
-
+/**
+ * This component renders the Navigation Buttons
+ *
+ * @param {string} direction Arrow direction
+ * @param {function} onClick Function responsible for the onClick
+ * @returns {ReactNode} A React element that renders the Navigation Button
+ */
 const NavigationButton: React.FC<NavigationButtonProps> = ({
   direction,
   onClick,

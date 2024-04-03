@@ -1,5 +1,9 @@
 import { Link } from "react-router-dom";
 
+/**
+ * Not Found Page
+ * @returns {ReactNode} A React element that renders a 404 not found (unknown route)
+ */
 const NotFoundPage: React.FC = () => {
   return (
     <div className="flex flex-col text-center justify-center h-screen">

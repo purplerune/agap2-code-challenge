@@ -9,6 +9,12 @@ import {
   fetchEpisodeSuccess,
 } from "../state/episode/episodeSlice";
 
+/**
+ * Hook Responsible for fetching Episode
+ *
+ * @param {number} episodeId episodeId
+ * @returns {useQuery} React useQuery
+ */
 export const useEpisodeQuery = (episodeId: number) => {
   const dispatch = useDispatch();
 

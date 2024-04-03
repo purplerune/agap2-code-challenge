@@ -8,6 +8,13 @@ interface EpisodeContainerProps {
   showName: string | undefined;
 }
 
+/**
+ * This component renders the Episode information inside a container
+ *
+ * @param {string} episode the episode with all it's attributes
+ * @param {string} showName The show's Name
+ * @returns {ReactNode} A React element that renders Episode in a Container
+ */
 const EpisodeContainer: React.FC<EpisodeContainerProps> = ({
   episode,
   showName,
