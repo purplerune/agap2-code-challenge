@@ -1,10 +1,8 @@
-// useShowQuery.ts
 import { useQuery } from "@tanstack/react-query";
 import { useDispatch } from "react-redux";
-import { fetchShowInformation } from "../services/episodeAPI";
 import { useEffect } from "react";
-
 import { IShow } from "../lib/interfaces";
+import { fetchEpisodesFromShowInformation } from "../services/episodeAPI";
 import {
   fetchShowFailure,
   fetchShowStart,
@@ -22,7 +20,7 @@ export const useShowQuery = (search: string) => {
     queryKey: ["show", { search }],
     queryFn: async () => {
       try {
-        const data = await fetchShowInformation(search);
+        const data = await fetchEpisodesFromShowInformation(search);
         dispatch(fetchShowSuccess(data));
         return data;
       } catch (error) {

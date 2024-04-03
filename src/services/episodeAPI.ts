@@ -15,7 +15,7 @@ export const fetchShowInformation = async (
   }
 };
 
-export const getEpisodesFromShowInformation = async (
+export const fetchEpisodesFromShowInformation = async (
   episodeName: string
 ): Promise<IShow | any> => {
   const URL = `${API_BASE_URL}/singlesearch/shows?q=${episodeName}&embed=episodes`;

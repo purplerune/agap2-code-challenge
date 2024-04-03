@@ -13,6 +13,8 @@ const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
 
+const router = createBrowserRouter([]);
+
 const queryClient = new QueryClient();
 root.render(
   <React.StrictMode>
