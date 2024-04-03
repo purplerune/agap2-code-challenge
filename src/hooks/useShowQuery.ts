@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import { useDispatch } from "react-redux";
 import { useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { IShow } from "../lib/interfaces";
 import { fetchEpisodesFromShowInformation } from "../services/episodeAPI";
 import {

@@ -1,13 +1,9 @@
 import "./App.css";
 import "@mantine/core/styles.css";
-import { Show } from "./pages/Show";
+import ShowPage from "./pages/ShowPage";
 
 function App() {
-  return (
-    <div className="flex w-full h-full">
-      <Show />
-    </div>
-  );
+  return <ShowPage />;
 }
 
 export default App;

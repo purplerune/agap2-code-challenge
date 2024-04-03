@@ -16,7 +16,7 @@ import { IEpisodeFromShow } from "../lib/interfaces";
 
 const PRE_DEFINED_LENGTH_OF_EPISODES_TO_FETCH = 4;
 
-export const Show: React.FC = () => {
+const ShowPage: React.FC = () => {
   const [search, setSearch] = useState<string>(DEFAULT_SHOW);
   const [displayedEpisodes, setDisplayedEpisodes] = useState<
     IEpisodeFromShow[]
@@ -85,8 +85,6 @@ export const Show: React.FC = () => {
 
   if (isLoading) return <div>Loading...</div>;
 
-  console.log("show", show?._embedded?.episodes);
-
   const ShowHeaderInformation: React.FC = () => {
     return (
       <>
@@ -137,9 +135,9 @@ export const Show: React.FC = () => {
             <div className="relative mx-5 my-5 rounded-xl bg-white p-2 shadow-lg">
               <div className="w-full bg-gray-200">
                 <img
-                  src={show?.image?.medium}
                   alt=""
                   className="mx-auto rounded-lg"
+                  src={show?.image?.medium}
                 />
               </div>
             </div>
@@ -154,8 +152,8 @@ export const Show: React.FC = () => {
             <div className="mx-auto">
               <div className="grid max-w-md grid-cols-1 gap-6 mx-auto lg:mt-16 lg:grid-cols-4 lg:max-w-full">
                 {displayedEpisodes.map((episode: IEpisodeFromShow) => (
-                  <div key={episode.id} className="flex h-10xl">
-                    <EpisodeContainer episode={episode} />
+                  <div key={episode.id} className="flex h-10xl min-w-72">
+                    <EpisodeContainer showName={show?.name} episode={episode} />
                   </div>
                 ))}
               </div>
@@ -172,3 +170,5 @@ export const Show: React.FC = () => {
     </div>
   );
 };
+
+export default ShowPage;

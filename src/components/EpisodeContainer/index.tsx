@@ -1,28 +1,26 @@
 import React from "react";
 import { HTML_REMOVER_REGEX } from "../../constants/constants";
 import { IEpisodeFromShow } from "../../lib/interfaces";
+import { Link } from "react-router-dom";
 
 interface EpisodeContainerProps {
   episode: IEpisodeFromShow;
+  showName: string | undefined;
 }
 
-const EpisodeContainer: React.FC<EpisodeContainerProps> = ({ episode }) => {
+const EpisodeContainer: React.FC<EpisodeContainerProps> = ({
+  episode,
+  showName,
+}) => {
   return (
-    <div className="overflow-hidden bg-white rounded shadow">
+    <div className="overflow-hidden bg-white rounded shadow w-full">
       <div className="p-5">
         <div className="relative">
-          <a
-            href={episode?.url}
-            title={episode?.name}
-            className="block aspect-w-4 aspect-h-3"
-          >
-            <img
-              className="object-cover w-full h-full"
-              src={episode?.image?.medium}
-              alt={episode?.name}
-            />
-          </a>
-
+          <img
+            className="object-cover w-full h-full"
+            src={episode?.image?.medium}
+            alt={episode?.name}
+          />
           <div className="absolute top-4 left-4">
             <span className="px-4 py-2 text-xs font-semibold tracking-widest text-gray-900 uppercase bg-white rounded-full">
               {episode?.type}
@@ -33,16 +31,16 @@ const EpisodeContainer: React.FC<EpisodeContainerProps> = ({ episode }) => {
           {episode?.airdate}
         </span>
         <p className="mt-5 text-2xl font-semibold">
-          <a href={episode?.url} title={episode?.name} className="text-black">
+          <span title={episode?.name} className="text-black">
             {episode?.name}
-          </a>
+          </span>
         </p>
         <p className="mt-4 text-base text-gray-600">
           {episode?.summary?.replace(HTML_REMOVER_REGEX, "")}
         </p>
-        <a
-          href={episode?.url}
-          title=""
+        <Link
+          key={episode?.url}
+          to={`/episodes/${showName}/${episode?.id || ""}`}
           className="inline-flex items-center justify-center pb-0.5 mt-5 text-base font-semibold text-blue-600 transition-all duration-200 border-b-2 border-transparent hover:border-blue-600 focus:border-blue-600"
         >
           Continue Reading
@@ -58,7 +56,7 @@ const EpisodeContainer: React.FC<EpisodeContainerProps> = ({ episode }) => {
               clipRule="evenodd"
             />
           </svg>
-        </a>
+        </Link>
       </div>
     </div>
   );

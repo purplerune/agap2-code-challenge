@@ -8,12 +8,25 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { MantineProvider } from "@mantine/core";
 import { Provider } from "react-redux";
 import { store } from "./state/store";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import NotFoundPage from "./pages/NotFoundPage";
+import { EpisodePage } from "./pages/EpisodePage";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
 
-const router = createBrowserRouter([]);
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <App />,
+    errorElement: <NotFoundPage />,
+  },
+  {
+    path: "/episodes/:showName/:episodeId",
+    element: <EpisodePage />,
+  },
+]);
 
 const queryClient = new QueryClient();
 root.render(
@@ -21,7 +34,7 @@ root.render(
     <QueryClientProvider client={queryClient}>
       <MantineProvider>
         <Provider store={store}>
-          <App />
+          <RouterProvider router={router} />
         </Provider>
       </MantineProvider>
       <ReactQueryDevtools initialIsOpen />
