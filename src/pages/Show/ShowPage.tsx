@@ -7,8 +7,13 @@ import { useShowQuery } from "../../hooks/useShowQuery";
 import { IEpisodeFromShow } from "../../lib/interfaces";
 import NameSummaryShowInformation from "./Components/NameSummaryShowInformation";
 import ShowHeaderInformation from "./Components/ShowHeaderInformation";
+import useResponsive from "../../hooks/useResponsive";
 
-const PRE_DEFINED_LENGTH_OF_EPISODES_TO_FETCH = 3;
+function getNumberOfCols(width: number) {
+  if (width > 1435) return 4;
+  if (width <= 1435 && width > 1125) return 3;
+  return 2;
+}
 
 /**
  * This component renders the TV Show Page
@@ -20,7 +25,17 @@ const ShowPage: React.FC = () => {
     IEpisodeFromShow[]
   >([]);
   const [startIndex, setStartIndex] = useState<number>(0);
+  const [nbOfColumns, setNbOfColumns] = useState(
+    getNumberOfCols(window.innerWidth)
+  );
   const { isLoading, data: show, refetch } = useShowQuery(search);
+  const width = useResponsive();
+
+  useEffect(() => {
+    setNbOfColumns(getNumberOfCols(width));
+  }, [width]);
+
+  console.log("nbOfColumns", nbOfColumns);
 
   useEffect(() => {
     refetch();
@@ -29,13 +44,10 @@ const ShowPage: React.FC = () => {
   useEffect(() => {
     if (show) {
       setDisplayedEpisodes(
-        show._embedded?.episodes.slice(
-          0,
-          PRE_DEFINED_LENGTH_OF_EPISODES_TO_FETCH
-        ) ?? []
+        show._embedded?.episodes.slice(0, nbOfColumns) ?? []
       );
     }
-  }, [show]);
+  }, [show, nbOfColumns]);
 
   const handleSearch = () => {
     setSearch(search);
@@ -57,17 +69,11 @@ const ShowPage: React.FC = () => {
       const episodesLength = show._embedded?.episodes.length || 0;
 
       const newIndex = forward
-        ? Math.min(
-            startIndex + PRE_DEFINED_LENGTH_OF_EPISODES_TO_FETCH,
-            episodesLength - PRE_DEFINED_LENGTH_OF_EPISODES_TO_FETCH
-          )
-        : Math.max(startIndex - PRE_DEFINED_LENGTH_OF_EPISODES_TO_FETCH, 0);
+        ? Math.min(startIndex + nbOfColumns, episodesLength - nbOfColumns)
+        : Math.max(startIndex - nbOfColumns, 0);
 
       const nextEpisodes =
-        show._embedded?.episodes.slice(
-          newIndex,
-          newIndex + PRE_DEFINED_LENGTH_OF_EPISODES_TO_FETCH
-        ) ?? [];
+        show._embedded?.episodes.slice(newIndex, newIndex + nbOfColumns) ?? [];
 
       setStartIndex(newIndex);
       setDisplayedEpisodes(nextEpisodes);
@@ -115,7 +121,12 @@ const ShowPage: React.FC = () => {
                   />
                 </div>
                 <div className="mx-auto w-full">
-                  <div className="grid max-w-md grid-cols-3 gap-6 mx-auto lg:mt-16  lg:max-w-full">
+                  <div
+                    className={`grid max-w-md grid-cols-3 gap-6 mx-auto lg:mt-16  lg:max-w-full`}
+                    style={{
+                      gridTemplateColumns: `repeat(${nbOfColumns}, 1fr)`,
+                    }}
+                  >
                     {displayedEpisodes.map((episode: IEpisodeFromShow) => (
                       <div key={episode.id} className="flex h-10xl min-w-72">
                         <EpisodeContainer
