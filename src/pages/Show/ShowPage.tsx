@@ -1,20 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { Toaster } from "react-hot-toast";
-import { useDispatch } from "react-redux";
 import EpisodeContainer from "../../components/EpisodeContainer";
 import NavigationButton from "../../components/NavigationButton";
 import { DEFAULT_SHOW, HTML_REMOVER_REGEX } from "../../constants/constants";
 import { useShowQuery } from "../../hooks/useShowQuery";
 import { IEpisodeFromShow } from "../../lib/interfaces";
-import {
-  fetchShowFailure,
-  fetchShowStart,
-  fetchShowSuccess,
-} from "../../state/show/showSlice";
 import NameSummaryShowInformation from "./Components/NameSummaryShowInformation";
 import ShowHeaderInformation from "./Components/ShowHeaderInformation";
 
-const PRE_DEFINED_LENGTH_OF_EPISODES_TO_FETCH = 3;
+const PRE_DEFINED_LENGTH_OF_EPISODES_TO_FETCH = 4;
 
 /**
  * This component renders the TV Show Page
@@ -27,20 +21,10 @@ const ShowPage: React.FC = () => {
   >([]);
   const [startIndex, setStartIndex] = useState<number>(0);
   const { isLoading, data: show, refetch } = useShowQuery(search);
-  const dispatch = useDispatch();
 
   useEffect(() => {
-    const fetchData = async () => {
-      dispatch(fetchShowStart());
-      try {
-        const result = await refetch();
-        if (result.data) dispatch(fetchShowSuccess(result.data));
-      } catch (error) {
-        dispatch(fetchShowFailure((error as Error).message));
-      }
-    };
-    fetchData();
-  }, [dispatch, refetch]);
+    refetch();
+  }, [refetch]);
 
   useEffect(() => {
     if (show) {
@@ -53,25 +37,18 @@ const ShowPage: React.FC = () => {
     }
   }, [show]);
 
-  const handleSearch = async () => {
-    try {
-      setSearch(search);
-      await refetch();
-    } catch (error: any) {}
+  const handleSearch = () => {
+    setSearch(search);
+    refetch();
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
   };
 
-  const handleKeyPress = async (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
-      try {
-        const result = await refetch();
-        if (result.data) dispatch(fetchShowSuccess(result.data));
-      } catch (error: any) {
-        dispatch(fetchShowFailure("Show data not found"));
-      }
+      refetch();
     }
   };
 
@@ -137,8 +114,8 @@ const ShowPage: React.FC = () => {
                     onClick={() => handleNext(false)}
                   />
                 </div>
-                <div className="mx-auto">
-                  <div className="grid max-w-md grid-cols-1 gap-6 mx-auto lg:mt-16 lg:grid-cols-3 lg:max-w-full">
+                <div className="mx-auto w-full">
+                  <div className="grid max-w-md grid-cols-3 gap-6 mx-auto lg:mt-16  lg:max-w-full">
                     {displayedEpisodes.map((episode: IEpisodeFromShow) => (
                       <div key={episode.id} className="flex h-10xl min-w-72">
                         <EpisodeContainer

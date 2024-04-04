@@ -23,7 +23,7 @@ export const useShowQuery = (search: string) => {
   }, [dispatch, search]);
 
   return useQuery<IShow>({
-    queryKey: ["show", { search }],
+    queryKey: ["show"],
     queryFn: async () => {
       try {
         const data = await fetchEpisodesFromShowInformation(search);

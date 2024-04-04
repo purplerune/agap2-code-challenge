@@ -8,7 +8,10 @@ import {
   fetchEpisodeStart,
   fetchEpisodeSuccess,
 } from "../../state/episode/episodeSlice";
-import { HTML_REMOVER_REGEX } from "../../constants/constants";
+import {
+  HTML_REMOVER_REGEX,
+  PLACEHOLDER_IMAGE,
+} from "../../constants/constants";
 
 /**
  * Page regarding Episode
@@ -55,7 +58,7 @@ export const EpisodePage: React.FC = () => {
           </div>
           <img
             className="relative  xl:max-w-lg xl:mx-auto 2xl:origin-bottom 2xl:scale-110"
-            src={episode?.image?.medium}
+            src={episode?.image?.medium || PLACEHOLDER_IMAGE}
             alt=""
           />
 

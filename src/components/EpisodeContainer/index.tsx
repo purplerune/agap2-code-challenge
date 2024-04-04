@@ -1,12 +1,24 @@
 import React from "react";
-import { HTML_REMOVER_REGEX } from "../../constants/constants";
+import {
+  HTML_REMOVER_REGEX,
+  PLACEHOLDER_IMAGE,
+} from "../../constants/constants";
 import { IEpisodeFromShow } from "../../lib/interfaces";
 import { Link } from "react-router-dom";
+import styled from "@emotion/styled";
 
 interface EpisodeContainerProps {
   episode: IEpisodeFromShow;
   showName: string | undefined;
 }
+
+const Summary = styled.p`
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 8;
+  -webkit-box-orient: vertical;
+`;
 
 /**
  * This component renders the Episode information inside a container
@@ -25,7 +37,7 @@ const EpisodeContainer: React.FC<EpisodeContainerProps> = ({
         <div className="relative">
           <img
             className="object-cover w-full h-full"
-            src={episode?.image?.medium}
+            src={episode?.image?.medium || PLACEHOLDER_IMAGE}
             alt={episode?.name}
           />
           <div className="absolute top-4 left-4">
@@ -42,9 +54,9 @@ const EpisodeContainer: React.FC<EpisodeContainerProps> = ({
             {episode?.name}
           </span>
         </p>
-        <p className="mt-4 text-base text-gray-600">
+        <Summary className="mt-4 text-base text-gray-600">
           {episode?.summary?.replace(HTML_REMOVER_REGEX, "")}
-        </p>
+        </Summary>
         <Link
           key={episode?.url}
           to={`/episodes/${showName}/${episode?.id || ""}`}
