@@ -27,7 +27,8 @@ export const useShowQuery = (search: string) => {
     queryFn: async () => {
       try {
         const data = await fetchEpisodesFromShowInformation(search);
-        dispatch(fetchShowSuccess(data));
+        if (!data) dispatch(fetchShowFailure("Invalid Query Params"));
+        if (data) dispatch(fetchShowSuccess(data));
         return data;
       } catch (error) {
         dispatch(fetchShowFailure((error as Error).message));

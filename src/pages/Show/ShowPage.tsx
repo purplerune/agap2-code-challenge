@@ -1,18 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { Toaster } from "react-hot-toast";
 import { useDispatch } from "react-redux";
-import { Button } from "@mantine/core";
-import { IconArrowRight, IconPhoto } from "@tabler/icons-react";
-import { DEFAULT_SHOW, HTML_REMOVER_REGEX } from "../constants/constants";
-import { useShowQuery } from "../hooks/useShowQuery";
+import EpisodeContainer from "../../components/EpisodeContainer";
+import NavigationButton from "../../components/NavigationButton";
+import { DEFAULT_SHOW, HTML_REMOVER_REGEX } from "../../constants/constants";
+import { useShowQuery } from "../../hooks/useShowQuery";
+import { IEpisodeFromShow } from "../../lib/interfaces";
 import {
   fetchShowFailure,
   fetchShowStart,
   fetchShowSuccess,
-} from "../state/show/showSlice";
-import EpisodeContainer from "../components/EpisodeContainer";
-import NavigationButton from "../components/NavigationButton";
-import { IEpisodeFromShow } from "../lib/interfaces";
-import toast, { Toaster } from "react-hot-toast";
+} from "../../state/show/showSlice";
+import NameSummaryShowInformation from "./Components/NameSummaryShowInformation";
+import ShowHeaderInformation from "./Components/ShowHeaderInformation";
 
 const PRE_DEFINED_LENGTH_OF_EPISODES_TO_FETCH = 3;
 
@@ -34,13 +34,11 @@ const ShowPage: React.FC = () => {
       dispatch(fetchShowStart());
       try {
         const result = await refetch();
-        if (!result) dispatch(fetchShowFailure("Show data not found"));
         if (result.data) dispatch(fetchShowSuccess(result.data));
       } catch (error) {
         dispatch(fetchShowFailure((error as Error).message));
       }
     };
-
     fetchData();
   }, [dispatch, refetch]);
 
@@ -59,25 +57,21 @@ const ShowPage: React.FC = () => {
     try {
       setSearch(search);
       await refetch();
-      notifySuccess("Show data fetched successfully!");
-    } catch (error: any) {
-      notifyError("Error fetching Show Data" + error.message);
-    }
+    } catch (error: any) {}
   };
-
-  const notifySuccess = (message: string) =>
-    toast.success(message, { duration: 1000, position: "top-center" });
-
-  const notifyError = (message: string) =>
-    toast.error(message, { duration: 1000, position: "top-center" });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
   };
 
-  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyPress = async (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
-      refetch();
+      try {
+        const result = await refetch();
+        if (result.data) dispatch(fetchShowSuccess(result.data));
+      } catch (error: any) {
+        dispatch(fetchShowFailure("Show data not found"));
+      }
     }
   };
 
@@ -105,44 +99,6 @@ const ShowPage: React.FC = () => {
 
   if (isLoading) return <div>Loading...</div>;
 
-  const ShowHeaderInformation: React.FC = () => {
-    return (
-      <>
-        <h2 className="mb-4 text-balance text-3xl font-extrabold text-white md:text-5xl">
-          Insert Show Name below
-        </h2>
-        <div className="flex flex-row justify-center gap-4">
-          <input
-            className="px-4 border border-gray-400 rounded-md focus:outline-none focus:border-blue-500"
-            type="text"
-            value={search}
-            onChange={handleInputChange}
-            onKeyDown={handleKeyPress}
-          />
-          <Button
-            variant="dark"
-            leftSection={<IconPhoto size={14} />}
-            rightSection={<IconArrowRight size={14} />}
-            onClick={handleSearch}
-          >
-            Search
-          </Button>
-        </div>
-      </>
-    );
-  };
-
-  const NameSummaryShowInformation: React.FC = () => {
-    return (
-      <>
-        <h1 className="mt-2 text-2xl font-bold text-white">{show?.name}</h1>
-        <h3 className="mt-3 text-md font-medium text-gray-400 ">
-          {show?.summary.replace(HTML_REMOVER_REGEX, "")}
-        </h3>
-      </>
-    );
-  };
-
   return (
     <>
       <div className="mx-auto flex min-h-dvh w-full min-w-[320px] flex-col bg-gray-100">
@@ -150,8 +106,16 @@ const ShowPage: React.FC = () => {
           <div className="bg-gray-900">
             <div className="container mx-auto px-4 pt-16 lg:px-8 lg:pt-32 xl:max-w-6xl">
               <div className="text-center">
-                <ShowHeaderInformation />
-                <NameSummaryShowInformation />
+                <ShowHeaderInformation
+                  search={search}
+                  handleInputChange={handleInputChange}
+                  handleKeyPress={handleKeyPress}
+                  handleSearch={handleSearch}
+                />
+                <NameSummaryShowInformation
+                  showName={show?.name}
+                  summary={show?.summary.replace(HTML_REMOVER_REGEX, "")}
+                />
               </div>
               {show && (
                 <div className="relative mx-5 my-5 rounded-xl bg-white p-2 shadow-lg">

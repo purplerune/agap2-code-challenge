@@ -2,13 +2,13 @@ import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 
-import { useEpisodeQuery } from "../hooks/useEpisodeQuery";
+import { useEpisodeQuery } from "../../hooks/useEpisodeQuery";
 import {
   fetchEpisodeFailure,
   fetchEpisodeStart,
   fetchEpisodeSuccess,
-} from "../state/episode/episodeSlice";
-import { HTML_REMOVER_REGEX } from "../constants/constants";
+} from "../../state/episode/episodeSlice";
+import { HTML_REMOVER_REGEX } from "../../constants/constants";
 
 /**
  * Page regarding Episode

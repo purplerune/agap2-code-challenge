@@ -9,8 +9,8 @@ import { MantineProvider } from "@mantine/core";
 import { Provider } from "react-redux";
 import { store } from "./state/store";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import NotFoundPage from "./pages/NotFoundPage";
-import { EpisodePage } from "./pages/EpisodePage";
+import NotFoundPage from "./pages/NotFound/NotFoundPage";
+import { EpisodePage } from "./pages/Episode/EpisodePage";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
