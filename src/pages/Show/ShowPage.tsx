@@ -8,7 +8,7 @@ import { IEpisodeFromShow } from "../../lib/interfaces";
 import NameSummaryShowInformation from "./Components/NameSummaryShowInformation";
 import ShowHeaderInformation from "./Components/ShowHeaderInformation";
 
-const PRE_DEFINED_LENGTH_OF_EPISODES_TO_FETCH = 4;
+const PRE_DEFINED_LENGTH_OF_EPISODES_TO_FETCH = 3;
 
 /**
  * This component renders the TV Show Page
